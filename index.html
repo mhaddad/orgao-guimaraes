@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-PT"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#eeece5"><meta name="description" content="Explore e toque uma reconstituição 3D do órgão da Colegiada de Nossa Senhora da Oliveira, Guimarães."><title>Órgão Histórico de Guimarães · Museu sonoro</title></head>
+<body>
+<header><a class="identity" href="./" aria-label="Página inicial"><span class="brandmark">♮</span><span>Órgão Histórico de Guimarães<small>Colegiada de Nossa Senhora da Oliveira</small></span></a><button class="help" id="help" aria-label="Ajuda">?</button></header>
+<main>
+<div id="scene" aria-label="Modelo tridimensional interativo do órgão histórico"><div id="loading"><span class="spinner"></span>A preparar o instrumento…</div></div>
+<aside class="control-panel" aria-label="Controlos do órgão">
+<div class="view-switch" role="group" aria-label="Vista do instrumento"><button id="overview" class="active">◈ <span>Explorar o órgão</span></button><button id="console">▥ <span>Tocar os teclados</span></button></div>
+<div class="scene-tools" role="group" aria-label="Navegação da câmara"><button id="reset" aria-label="Voltar à vista geral" title="Voltar à vista geral">↺</button><button id="zoom-in" aria-label="Aproximar" title="Aproximar">＋</button><button id="zoom-out" aria-label="Afastar" title="Afastar">−</button></div>
+</aside>
+<aside id="keyboard-panel" hidden><div class="keyboard-heading"><span>O instrumento está nas suas mãos</span><label>Oitava <select id="octave"><option value="48">Dó 3</option><option value="60" selected>Dó 4</option><option value="72">Dó 5</option></select></label></div><div id="keyboard" aria-label="Teclado virtual"></div><p>Toque nas teclas ou use <kbd>A W S E D F T G Y H U J K</kbd><span id="note-name">—</span></p></aside>
+</main>
+<footer><div class="track-icon">♫</div><div class="track-info"><span class="eyebrow">OUVIR O INSTRUMENTO</span><strong>Prelúdio em Dó maior <span>BWV 846</span></strong><small>Johann Sebastian Bach <span>·</span> Adaptação para órgão</small></div><div class="transport"><button id="restart" aria-label="Reiniciar composição">↤</button><button id="play" aria-label="Reproduzir composição" disabled>▶</button><div class="timeline"><div class="time-label"><span id="elapsed">0:00</span><span id="duration">—</span></div><input type="range" min="0" max="100" step="0.05" value="0" id="progress" aria-label="Posição da composição"></div></div><div class="volume"><button id="mute" aria-label="Silenciar">◖))</button><input id="volume" type="range" min="0" max="1" step="0.01" value="0.65" aria-label="Volume"></div><span class="sound-note">Som sintetizado<br>Acústica de igreja</span></footer>
+<dialog id="dialog"><button class="close" aria-label="Fechar">×</button><div id="dialog-content"></div></dialog><div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/src/main.js"></script></body></html>

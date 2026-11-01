@@ -1,0 +1,24 @@
+# Dependencies and generated production files
+node_modules/
+dist/
+coverage/
+
+# Local configuration and caches
+.env
+.env.*
+!.env.example
+*.local
+*.log
+.vite/
+__pycache__/
+*.py[cod]
+
+# Operating system and editor metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Temporary development captures
+/*-preview.png
+/coroa-*-detalhe.png
