@@ -33,13 +33,13 @@ O navegador deve suportar WebGL 2 e Web Audio. O áudio só inicia após uma int
 
 | Ação | Controlo |
 | --- | --- |
-| Ver o instrumento completo | **Explorar o órgão** ou **↺** |
+| Ver o instrumento completo | **Ver Órgão** |
 | Aproximar a consola | **Tocar os teclados** |
-| Ajustar a aproximação | Botões **+** e **−**, roda do rato ou gesto de pinça |
+| Ajustar a aproximação | Roda do rato ou gesto de pinça |
 | Tocar notas | Teclas 3D, teclado no ecrã ou `A W S E D F T G Y H U J K` |
 | Alterar a oitava do teclado físico | Seletor **Oitava** |
-| Reproduzir ou pausar | Botão no painel musical; Espaço quando o foco está na página |
-| Ouvir um trecho | Barra de progresso no painel musical |
+| Reproduzir ou pausar | Botão ▶ no painel inferior; Espaço quando o foco está na página |
+| Ouvir um trecho | Barra de progresso no painel inferior |
 
 Os botões do teclado no ecrã também respondem a Enter e Espaço quando têm foco. A aplicação liberta as notas e pausa a peça ao mudar de separador ou perder o foco da janela.
 

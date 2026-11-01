@@ -8,7 +8,7 @@ import {buildOrgan} from './model.js';
 import {frontalPose} from './navigation.js';
 import {cameraDepthRange} from './render-stability.js';
 import {zoomMotion,sampleZoomMotion} from './zoom-motion.js';
-export function createScene(container,onDown,onUp,onViewChange=()=>{}){
+export function createScene(container,onDown,onUp,onViewChange=()=>{},overlay=null){
  const diagnostic=new URLSearchParams(location.search).has('diagnostico');
  const scene=new THREE.Scene();scene.background=new THREE.Color('#15110d');scene.fog=new THREE.Fog('#15110d',28,70);
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=new URLSearchParams(location.search).get('sombras')!=='0';renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;container.appendChild(renderer.domElement);
@@ -46,11 +46,14 @@ export function createScene(container,onDown,onUp,onViewChange=()=>{}){
  }
  function view(which='overview',instant=false){moveTo(which==='console'?1:0,instant);}
  function zoom(factor){moveTo(THREE.MathUtils.clamp(destination-Math.log(factor)*.8,0,1));}
- function positionCamera(){const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;const pose=diagnostic&&new URLSearchParams(location.search).has('coroa')?{position:[0,7.95,6],target:[0,7.95,0]}:frontalPose(progress,w/h,w<680);const aspect=w/h,depth=cameraDepthRange(pose.position[2]);
-  if(camera.aspect!==aspect||camera.far!==depth.far){camera.aspect=aspect;camera.near=depth.near;camera.far=depth.far;camera.updateProjectionMatrix();}
+ // The overlay covers the bottom of the canvas; frame the instrument in the visible area above it.
+ let inset=0;function measureInset(){if(!overlay)return;const stage=container.getBoundingClientRect(),dock=overlay.getBoundingClientRect();inset=Math.max(0,Math.min(stage.bottom-dock.top,stage.height*.5));}
+ function positionCamera(){const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;const visible=h-inset,aspect=w/visible;const pose=diagnostic&&new URLSearchParams(location.search).has('coroa')?{position:[0,7.95,6],target:[0,7.95,0]}:frontalPose(progress,aspect,w<680);const depth=cameraDepthRange(pose.position[2]),view=camera.view;
+  if(camera.aspect!==aspect||camera.far!==depth.far||view?.fullHeight!==visible||view?.height!==h||view?.width!==w){camera.aspect=aspect;camera.near=depth.near;camera.far=depth.far;camera.setViewOffset(w,visible,0,0,w,h);}
   camera.position.fromArray(pose.position);camera.lookAt(...pose.target);}
- new ResizeObserver(()=>{renderer.setSize(container.clientWidth,container.clientHeight);composer.setSize(container.clientWidth,container.clientHeight);positionCamera();dirty=true;}).observe(container);
- renderer.setSize(container.clientWidth,container.clientHeight);composer.setSize(container.clientWidth,container.clientHeight);positionCamera();
+ function resize(){measureInset();renderer.setSize(container.clientWidth,container.clientHeight);composer.setSize(container.clientWidth,container.clientHeight);positionCamera();dirty=true;}
+ const observer=new ResizeObserver(resize);observer.observe(container);if(overlay)observer.observe(overlay);
+ resize();
  const active=new Map();function setKey(id,midi,manual,down){if(down)active.set(id,{midi,manual});else active.delete(id);dirty=true;}
  const ray=new THREE.Raycaster(),point=new THREE.Vector2(),pointers=new Map(),touches=new Map();let pinchDistance=null;
  function hit(e){const r=renderer.domElement.getBoundingClientRect();point.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(point,camera);return ray.intersectObjects(organ.keys,false)[0]?.object;}
